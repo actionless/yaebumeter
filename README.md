@@ -20,7 +20,10 @@ etc
 ## Some screenshots
 
 ### Original
+![preview](https://github.com/actionless/ebumeter-hidpi/raw/master/screenshots/scale1.png)
 
 ### x1.5 scale
+![preview_scale1.5](https://github.com/actionless/ebumeter-hidpi/raw/master/screenshots/scale1.5.png)
 
 ### x2 scale
+![preview_scale2](https://github.com/actionless/ebumeter-hidpi/raw/master/screenshots/scale2.png)
