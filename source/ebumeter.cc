@@ -72,17 +72,25 @@ const char* GetEnv( const char* tag, const char* def=nullptr ) noexcept {
 }
 
 
-int main (int ac, char *av [])
-{
+const float DetectDisplayScale () {
+	// @TODO: implement actual dpi detection using X dpy
+	//        instead of using 1.0 as a fallback:
 	float scale = 1.0;
+
 	const char * scale_env = GetEnv("EBUMETER_SCALE");
-	printf("Going to detect DPI from EBUMETER_SCALE env var:\n");
+	printf("Going to detect DPI from EBUMETER_SCALE env var...\n");
 	if (scale_env) {
 		scale = std::stof(scale_env);
 		printf("%s\n", scale_env);
 	}
-	printf("%f\n", scale);
-	printf("DPI detection finished\n");
+	printf("DPI detection finished: %f\n", scale);
+	return scale;
+}
+
+
+int main (int ac, char *av [])
+{
+	float scale = DetectDisplayScale();
     X_resman       xresman;
     X_display     *display;
     X_handler     *handler;
