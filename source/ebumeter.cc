@@ -24,6 +24,7 @@
 #include <clthreads.h>
 #include <sys/mman.h>
 #include <signal.h>
+#include <string>
 #include "styles.h"
 #include "jclient.h"
 #include "mainwin.h"
@@ -65,8 +66,23 @@ static void sigint_handler (int)
 }
 
 
+const char* GetEnv( const char* tag, const char* def=nullptr ) noexcept {
+  const char* ret = std::getenv(tag);
+  return ret ? ret : def;
+}
+
+
 int main (int ac, char *av [])
 {
+	float scale = 1.0;
+	const char * scale_env = GetEnv("EBUMETER_SCALE");
+	printf("Going to detect DPI from EBUMETER_SCALE env var:\n");
+	if (scale_env) {
+		scale = std::stof(scale_env);
+		printf("%s\n", scale_env);
+	}
+	printf("%f\n", scale);
+	printf("DPI detection finished\n");
     X_resman       xresman;
     X_display     *display;
     X_handler     *handler;
@@ -75,7 +91,7 @@ int main (int ac, char *av [])
 
     xresman.init (&ac, av, CP PROGNAME, options, NOPTS);
     if (xresman.getb (".help", 0)) help ();
-            
+
     display = new X_display (xresman.get (".display", 0));
     if (display->dpy () == 0)
     {
