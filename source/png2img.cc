@@ -21,6 +21,7 @@
 
 #include <png.h>
 #include <clxclient.h>
+#include <math.h>
 
 #include "mainwin.h"
 
@@ -117,13 +118,15 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
         for (x = 0; x < scaled_dx; x++)
 		{
 			x2 = (int)(x/scale);
-			xo = x % (int)(scale);
+			xo = fmod(x, scale);
 			va = (dp == 4) ? (p [3] / 255.0f) : 1;
 			pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
 					| ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
 					| ((unsigned long)((p [2] * va + (1 - va) * bb) * vb) & mb);
 			XPutPixel (image, x, y, pix);
+			//printf("%d %d %d\n", x2, x, xo);
 			if (!xo) {
+				//printf("P: %d %d\n", x2, x);
 				p += dp;
 			}
 		}
