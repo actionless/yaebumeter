@@ -85,10 +85,12 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
 
     data = (const unsigned char **)(png_get_rows (png_ptr, png_info));
 
+	int scaled_dx = (int)roundf(scale*dx);
+	int scaled_dy = (int)roundf(scale*dy);
     image = XCreateImage (disp->dpy (),
                           disp->dvi (),
                           DefaultDepth (disp->dpy (), disp->dsn ()),
-                          ZPixmap, 0, 0, (int)(dx*scale), (int)(dy*scale), 32, 0);
+                          ZPixmap, 0, 0, scaled_dx, scaled_dy, 32, 0);
     image->data = new char [image->height * image->bytes_per_line];
 
     mr = image->red_mask;
@@ -106,27 +108,28 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
     }
     else br = bg = bb = 0;
 
-	int scaled_dy = (int)(scale*dy);
-	int scaled_dx = (int)(scale*dx);
 	int y2;
 	int x2;
 	int xo;
     for (y = 0; y < scaled_dy; y++)
     {
 		y2 = (int)(y/scale);
+		if (y2 == dy) {
+			y2--;
+		}
 		p = data [y2];
         for (x = 0; x < scaled_dx; x++)
 		{
-			x2 = (int)(x/scale);
-			xo = fmod(x, scale);
+			x2 = (int)roundf(x/scale);
+			xo = (int)fmod(x, scale);
 			va = (dp == 4) ? (p [3] / 255.0f) : 1;
 			pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
 					| ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
 					| ((unsigned long)((p [2] * va + (1 - va) * bb) * vb) & mb);
 			XPutPixel (image, x, y, pix);
-			//printf("%d %d %d\n", x2, x, xo);
-			if (!xo) {
-				//printf("P: %d %d\n", x2, x);
+			//printf("X %d %d %d (%d) (y%d)\n", x2, x, xo, dx, y);
+			if (!xo and (x2 < dx-1)) {
+				//printf("XP: %d %d %d\n", x2, x, xo);
 				p += dp;
 			}
 		}
