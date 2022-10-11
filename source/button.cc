@@ -19,6 +19,7 @@
 // ----------------------------------------------------------------------
 
 
+#include <math.h>
 #include "button.h"
 
 
@@ -36,13 +37,13 @@ PushButton::PushButton (X_window     *parent,
 			int  ys,
 			float scale) :
 	scale (scale),
-    X_window (parent, (int)(xp*scale), (int)(yp*scale), (int)(xs*scale), (int)(ys*scale), 0),
+    X_window (parent, (int)roundf(xp*scale), (int)roundf(yp*scale), (int)roundf(xs*scale), (int)roundf(ys*scale), 0),
     _cbobj (cbobj),
     _cbind (cbind),
     _image (image),
     _state (0),
-    _xs ((int)(xs*scale)),
-    _ys ((int)(ys*scale))
+    _xs ((int)roundf(xs*scale)),
+    _ys ((int)roundf(ys*scale))
 {
     x_add_events (ExposureMask | ButtonPressMask | ButtonReleaseMask);
 } 

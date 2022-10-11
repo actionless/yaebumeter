@@ -23,6 +23,7 @@
 #include "png2img.h"
 #include "ebu_r128_disp.h"
 #include <cstdio>
+#include <math.h>
 
 
 XftColor      *XftColors [NXFTCOLORS];
@@ -57,8 +58,8 @@ int styles_init (X_display *disp, X_resman *xrm, const char *shared, float scale
     XftColors [C_DISP_PK] = disp->alloc_xftcolor (1.00f, 1.00f, 1.00f, 1.0f);
 
 	const int max_fontname_size = 100;
-	const int fontsize1 = 13*scale;
-	const int fontsize2 = 18*scale;
+	const int fontsize1 = (int)roundf(13*scale);
+	const int fontsize2 = (int)roundf(18*scale);
 	char fontname1[max_fontname_size];
 	char fontname2[max_fontname_size];
 	sprintf(fontname1, "luxi:bold:pixelsize=%d", fontsize1);

@@ -125,15 +125,15 @@ void Ebu_r128_disp::fini (X_display *disp)
 
 
 void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f) {
-    XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
+    XPutImage (dpy, win, dgc, _img, (int)roundf(a*scale), (int)roundf(b*scale),  (int)roundf(c*scale), (int)roundf(d*scale), (int)roundf(e*scale), (int)roundf(f*scale));
 }
 
 void Ebu_r128_disp::scaled_XFillRectangle(Display* dpy, Drawable win, GC dgc, int a, int b, int c, int d) {
-	XFillRectangle (dpy, win, dgc, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale));
+	XFillRectangle (dpy, win, dgc, (int)roundf(a*scale), (int)roundf(b*scale),  (int)roundf(c*scale), (int)roundf(d*scale));
 }
 
 X_textip* Ebu_r128_disp::scaled_X_texttip(Ebu_r128_disp* drawable, X_callback* cb, X_textln_style* style, int a, int b, int c, int d, int e) {
-	return new X_textip(drawable, cb, style, (int)(a*scale), (int)(b*scale), (int)(c*scale), (int)(d*scale), (int)(e*scale));
+	return new X_textip(drawable, cb, style, (int)roundf(a*scale), (int)roundf(b*scale), (int)roundf(c*scale), (int)roundf(d*scale), (int)roundf(e*scale));
 }
 
 Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg, float win_scale) :
@@ -210,8 +210,7 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale18a : _ihscale18r;
         _imag1 = _ihmeter18;
-        //_db2pix = (int)(IDIV / 2.0 * scale);
-        _db2pix = (int)(IDIV / 2.0);
+        _db2pix = (int)roundf(IDIV / 2.0);
         _bscale09->set_state (0);
         _bscale18->set_state (2);
     }
@@ -219,7 +218,6 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale09a : _ihscale09r;
         _imag1 = _ihmeter09;
-        //_db2pix = (int)(IDIV * scale);
         _db2pix = IDIV;
         _bscale09->set_state (2);
         _bscale18->set_state (0);

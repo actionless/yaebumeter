@@ -36,9 +36,10 @@ Mainwin::Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jc
     _xres (xres),
     _jclient (jclient)
 {
-	//Mainwin::scale = win_scale;
     X_hints     H;
     char        s [1024];
+	int x_scaled = (int)(roundf(XSIZE*scale));
+	int y_scaled = (int)(roundf(YSIZE*scale));
 
     _atom = XInternAtom (dpy (), "WM_DELETE_WINDOW", True);
     XSetWMProtocols (dpy (), win (), &_atom, 1);
@@ -47,8 +48,8 @@ Mainwin::Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jc
     sprintf (s, "%s - %s  [%s]", PROGNAME, VERSION, jclient->jname ());
     x_set_title (s);
     H.position (xp, yp);
-    H.minsize (XSIZE*scale, YSIZE*scale);
-    H.maxsize (XSIZE*scale, YSIZE*scale);
+    H.minsize (x_scaled, y_scaled);
+    H.maxsize (x_scaled, y_scaled);
     H.rname (xres->rname ());
     H.rclas (xres->rclas ());
     x_apply (&H); 
@@ -152,7 +153,12 @@ void Mainwin::handle_callb (int type, X_window *W, XEvent *E)
 
 void Mainwin::redraw (void)
 {
-    XPutImage (dpy (), win (), dgc (), redzita, 0, 0, (XSIZE - 35) * scale, 0, 35*scale, 75*scale);
+    XPutImage (
+		dpy (), win (), dgc (), redzita,
+		0, 0,
+		(int)roundf((XSIZE - 35) * scale), 0,
+		(int)round(35*scale), (int)roundf(75*scale)
+	);
 }
 
 

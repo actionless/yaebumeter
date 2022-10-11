@@ -28,6 +28,7 @@
 #include "styles.h"
 #include "jclient.h"
 #include "mainwin.h"
+#include <math.h>
 
 
 #define NOPTS 3
@@ -108,9 +109,9 @@ int main (int ac, char *av [])
 	return 1;
     }
 
-    xp = yp = (100 * scale);
-    xs = (Mainwin::XSIZE + 2) * scale;
-    ys = (Mainwin::YSIZE + 22) * scale;
+    xp = (int)roundf(yp = (100 * scale));
+    xs = (int)roundf((Mainwin::XSIZE + 2) * scale);
+    ys = (int)roundf((Mainwin::YSIZE + 22) * scale);
     xresman.geometry (".geometry", display->xsize (), display->ysize (), 1, xp, yp, xs, ys);
     if (styles_init (display, &xresman, SHARED, scale))
     {
