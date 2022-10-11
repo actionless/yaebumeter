@@ -198,7 +198,8 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale18a : _ihscale18r;
         _imag1 = _ihmeter18;
-        _db2pix = (int)(IDIV / 2.0 * scale);
+        //_db2pix = (int)(IDIV / 2.0 * scale);
+        _db2pix = (int)(IDIV / 2.0);
         _bscale09->set_state (0);
         _bscale18->set_state (2);
     }
@@ -206,7 +207,8 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale09a : _ihscale09r;
         _imag1 = _ihmeter09;
-        _db2pix = (int)(IDIV * scale);
+        //_db2pix = (int)(IDIV * scale);
+        _db2pix = IDIV;
         _bscale09->set_state (2);
         _bscale18->set_state (0);
     }
@@ -337,7 +339,6 @@ void Ebu_r128_disp::handle_callb (int type, X_window *W, XEvent *E)
 
 
 void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f) {
-	printf("%d %d %d %d %d %d\n", a, b, c, d, e, f);
     XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
 }
 

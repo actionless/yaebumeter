@@ -109,6 +109,7 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
 	int scaled_dx = (int)(scale*dx);
 	int y2;
 	int x2;
+	int xo;
     for (y = 0; y < scaled_dy; y++)
     {
 		y2 = (int)(y/scale);
@@ -116,12 +117,15 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
         for (x = 0; x < scaled_dx; x++)
 		{
 			x2 = (int)(x/scale);
+			xo = x % (int)(scale);
 			va = (dp == 4) ? (p [3] / 255.0f) : 1;
 			pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
 					| ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
 					| ((unsigned long)((p [2] * va + (1 - va) * bb) * vb) & mb);
 			XPutPixel (image, x, y, pix);
-			p += dp;
+			if (!xo) {
+				p += dp;
+			}
 		}
     }
 
