@@ -87,7 +87,7 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
     image = XCreateImage (disp->dpy (),
                           disp->dvi (),
                           DefaultDepth (disp->dpy (), disp->dsn ()),
-                          ZPixmap, 0, 0, dx*scale, dy*scale, 32, 0);
+                          ZPixmap, 0, 0, (int)(dx*scale), (int)(dy*scale), 32, 0);
     image->data = new char [image->height * image->bytes_per_line];
 
     mr = image->red_mask;
@@ -105,11 +105,17 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
     }
     else br = bg = bb = 0;
 
-    for (y = 0; y < dy; y++)
+	int scaled_dy = (int)(scale*dy);
+	int scaled_dx = (int)(scale*dx);
+	int y2;
+	int x2;
+    for (y = 0; y < scaled_dy; y++)
     {
-		p = data [y];
-        for (x = 0; x < dx; x++)
+		y2 = (int)(y/scale);
+		p = data [y2];
+        for (x = 0; x < scaled_dx; x++)
 		{
+			x2 = (int)(x/scale);
 			va = (dp == 4) ? (p [3] / 255.0f) : 1;
 			pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
 					| ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
