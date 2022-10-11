@@ -42,6 +42,7 @@ public:
     static void fini (X_display *disp);
 
 	void scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f);
+	void scaled_XFillRectangle(Display* dpy, Drawable win, GC dgc, int a, int b, int c, int d);
 	X_textip* scaled_X_texttip(Ebu_r128_disp* drawable, X_callback* cb, X_textln_style* style, int a, int b, int c, int d, int e);
     void set_scale (bool abs, bool ext);
     void set_level (float vm, float pm, float vs, float ps);

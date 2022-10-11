@@ -128,6 +128,9 @@ void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage*
     XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
 }
 
+void Ebu_r128_disp::scaled_XFillRectangle(Display* dpy, Drawable win, GC dgc, int a, int b, int c, int d) {
+	XFillRectangle (dpy, win, dgc, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale));
+}
 
 X_textip* Ebu_r128_disp::scaled_X_texttip(Ebu_r128_disp* drawable, X_callback* cb, X_textln_style* style, int a, int b, int c, int d, int e) {
 	return new X_textip(drawable, cb, style, (int)(a*scale), (int)(b*scale), (int)(c*scale), (int)(d*scale), (int)(e*scale));
@@ -407,7 +410,7 @@ void Ebu_r128_disp::disp_level (void)
     }	    
     if (dp > 0)
     {
-        XFillRectangle (dpy (), win (), dgc (), (int)((kp - dp)*scale), (int)(Y2*scale), (int)(dp*scale), (int)((H2 - 1)*scale));
+        scaled_XFillRectangle (dpy (), win (), dgc (), kp - dp, Y2, dp, H2 - 1);
     }
     _kr = kr;
     _kp = kp;
