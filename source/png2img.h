@@ -26,7 +26,7 @@
 #include <clxclient.h>
 
 
-extern XImage *png2img (const char *file, X_display *disp, XftColor *bgnd);
+extern XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale);
 
 
 #endif

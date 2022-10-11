@@ -22,6 +22,7 @@
 #include "styles.h"
 #include "png2img.h"
 #include "ebu_r128_disp.h"
+#include <cstdio>
 
 
 XftColor      *XftColors [NXFTCOLORS];
@@ -32,20 +33,20 @@ X_textln_style tstyle2;
 XImage        *redzita;
 
 
-static int loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag)
+static int loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag, float scale)
 {
     char   s [1024];
     XImage *p;
 
     snprintf (s, 1024, "%s/%s", sdir, file);
-    p = png2img (s, disp, 0);
+    p = png2img (s, disp, 0, scale);
     *imag = p;
     return p ? 0 : 1;
 }
 
 
 
-int styles_init (X_display *disp, X_resman *xrm, const char *shared)
+int styles_init (X_display *disp, X_resman *xrm, const char *shared, float scale)
 {
     XftColors [C_MAIN_BG] = disp->alloc_xftcolor (0.15f, 0.15f, 0.15f, 1.0f);
     XftColors [C_MAIN_FG] = disp->alloc_xftcolor (1.00f, 1.00f, 1.00f, 1.0f);
@@ -55,8 +56,16 @@ int styles_init (X_display *disp, X_resman *xrm, const char *shared)
     XftColors [C_DISP_FG] = disp->alloc_xftcolor (0.80f, 0.80f, 0.80f, 1.0f);
     XftColors [C_DISP_PK] = disp->alloc_xftcolor (1.00f, 1.00f, 1.00f, 1.0f);
 
-    XftFonts [F_DISP1] = disp->alloc_xftfont (xrm->get (".font.disp1", "luxi:bold:pixelsize=13"));
-    XftFonts [F_DISP2] = disp->alloc_xftfont (xrm->get (".font.disp2", "luxi:bold:pixelsize=18"));
+	const int max_fontname_size = 100;
+	const int fontsize1 = 13*scale;
+	const int fontsize2 = 18*scale;
+	char fontname1[max_fontname_size];
+	char fontname2[max_fontname_size];
+	sprintf(fontname1, "luxi:bold:pixelsize=%d", fontsize1);
+	sprintf(fontname2, "luxi:bold:pixelsize=%d", fontsize2);
+
+    XftFonts [F_DISP1] = disp->alloc_xftfont (xrm->get (".font.disp1", fontname1));
+    XftFonts [F_DISP2] = disp->alloc_xftfont (xrm->get (".font.disp2", fontname2));
 
     tstyle1.font = XftFonts [F_DISP1];
     tstyle1.color.normal.bgnd = XftColors [C_DISP_BG]->pixel;
@@ -66,7 +75,7 @@ int styles_init (X_display *disp, X_resman *xrm, const char *shared)
     tstyle2.color.normal.bgnd = XftColors [C_DISP_BG]->pixel;
     tstyle2.color.normal.text = XftColors [C_DISP_FG];
 
-    if (loadimg (disp, shared, "redzita.png", &redzita) || Ebu_r128_disp::init (disp, SHARED))
+    if (loadimg (disp, shared, "redzita.png", &redzita, scale) || Ebu_r128_disp::init (disp, SHARED, scale))
     {
 	fprintf (stderr, "Can't load images from '%s'.\n", shared);
         return 1;

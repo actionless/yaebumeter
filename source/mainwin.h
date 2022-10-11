@@ -35,13 +35,16 @@ public:
 
     enum { XSIZE = 640, YSIZE = 75 };
 
-    Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jclient);
+    Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jclient, float win_scale);
     ~Mainwin (void);
     Mainwin (const Mainwin&);
     Mainwin& operator=(const Mainwin&);
 
     void stop (void) { _stop = true; }
     int process (void); 
+
+	//static float scale;
+	//float get_scale (void) { return scale; }
 
 private:
 
@@ -60,6 +63,8 @@ private:
     X_resman       *_xres;
     Jclient        *_jclient;
     Ebu_r128_disp  *_ebudisp;
+
+	float scale;
 };
 
 

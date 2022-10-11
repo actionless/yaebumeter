@@ -100,19 +100,19 @@ int main (int ac, char *av [])
 	return 1;
     }
 
-    xp = yp = 100;
-    xs = Mainwin::XSIZE + 2;
-    ys = Mainwin::YSIZE + 22;
+    xp = yp = (100 * scale);
+    xs = (Mainwin::XSIZE + 2) * scale;
+    ys = (Mainwin::YSIZE + 22) * scale;
     xresman.geometry (".geometry", display->xsize (), display->ysize (), 1, xp, yp, xs, ys);
-    if (styles_init (display, &xresman, SHARED))
+    if (styles_init (display, &xresman, SHARED, scale))
     {
-	delete display;
-	return 1;
+		delete display;
+		return 1;
     }
 
     jclient = new Jclient (xresman.rname (), xresman.get (".server", 0));
     rootwin = new X_rootwin (display);
-    mainwin = new Mainwin (rootwin, &xresman, xp, yp, jclient);
+    mainwin = new Mainwin (rootwin, &xresman, xp, yp, jclient, scale);
     rootwin->handle_event ();
     handler = new X_handler (display, mainwin, EV_X11);
     handler->next_event ();

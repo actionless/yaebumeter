@@ -28,13 +28,15 @@
 
 
 
-Mainwin::Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jclient) :
+Mainwin::Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jclient, float win_scale) :
+	scale (win_scale),
     A_thread ("Main"),
-    X_window (parent, xp, yp, XSIZE, YSIZE, XftColors [C_MAIN_BG]->pixel),
+    X_window (parent, xp, yp, XSIZE*win_scale, YSIZE*win_scale, XftColors [C_MAIN_BG]->pixel),
     _stop (false),
     _xres (xres),
     _jclient (jclient)
 {
+	//Mainwin::scale = win_scale;
     X_hints     H;
     char        s [1024];
 
@@ -45,13 +47,13 @@ Mainwin::Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jc
     sprintf (s, "%s - %s  [%s]", PROGNAME, VERSION, jclient->jname ());
     x_set_title (s);
     H.position (xp, yp);
-    H.minsize (XSIZE, YSIZE);
-    H.maxsize (XSIZE, YSIZE);
+    H.minsize (XSIZE*scale, YSIZE*scale);
+    H.maxsize (XSIZE*scale, YSIZE*scale);
     H.rname (xres->rname ());
     H.rclas (xres->rclas ());
     x_apply (&H); 
 
-    _ebudisp = new Ebu_r128_disp (this, this, 0, 0, XftColors [C_DISP_BG]);
+    _ebudisp = new Ebu_r128_disp (this, this, 0, 0, XftColors [C_DISP_BG], scale);
     _ebudisp->x_map ();
 
     x_add_events (ExposureMask); 
@@ -150,7 +152,7 @@ void Mainwin::handle_callb (int type, X_window *W, XEvent *E)
 
 void Mainwin::redraw (void)
 {
-    XPutImage (dpy (), win (), dgc (), redzita, 0, 0, XSIZE - 35, 0, 35, 75);
+    XPutImage (dpy (), win (), dgc (), redzita, 0, 0, (XSIZE - 35) * scale, 0, 35*scale, 75*scale);
 }
 
 

@@ -32,12 +32,12 @@ class Ebu_r128_disp : public X_window, public X_callback
 {
 public:
 
-    Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg);
+    Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg, float win_scale);
     ~Ebu_r128_disp (void);
     Ebu_r128_disp (const Ebu_r128_disp&);
     Ebu_r128_disp& operator=(const Ebu_r128_disp&);
 
-    static int  init (X_display *disp, const char *shared);
+    static int  init (X_display *disp, const char *shared, float scale);
     static void fini (X_display *disp);
 
     void set_scale (bool abs, bool ext);
@@ -98,7 +98,7 @@ private:
 
     float db2pix (float v) { return _pixref + _db2pix * (v + 23.0f); }
 
-    static int loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag);
+    static int loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag, float scale);
 
     X_callback *_callb;
 
@@ -159,6 +159,8 @@ private:
     static XImage  *_ibstart;
     static XImage  *_ibreset;
     static XImage  *_ibpeak1;
+	
+	float scale;
 };
 
 

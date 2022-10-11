@@ -45,38 +45,38 @@ XImage  *Ebu_r128_disp::_ibreset = 0;
 XImage  *Ebu_r128_disp::_ibpeak1 = 0;
 
 
-int Ebu_r128_disp::loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag)
+int Ebu_r128_disp::loadimg (X_display *disp, const char *sdir, const char *file, XImage **imag, float scale)
 {
     char   s [1024];
     XImage *p;
 
     snprintf (s, 1024, "%s/%s", sdir, file);
-    p = png2img (s, disp, 0);
+    p = png2img (s, disp, 0, scale);
     *imag = p;
     return p ? 0 : 1;
 }
 
 
-int Ebu_r128_disp::init (X_display *disp, const char *shared)
+int Ebu_r128_disp::init (X_display *disp, const char *shared, float scale)
 {
-    return (   loadimg (disp, shared, "hscale09r.png", &_ihscale09r)
-            || loadimg (disp, shared, "hscale09a.png", &_ihscale09a)
-            || loadimg (disp, shared, "hscale18r.png", &_ihscale18r)
-            || loadimg (disp, shared, "hscale18a.png", &_ihscale18a)
-            || loadimg (disp, shared, "hticks.png", &_ihticks)
-            || loadimg (disp, shared, "hmeterbg.png", &_ihmeterbg)
-            || loadimg (disp, shared, "hmeter09.png", &_ihmeter09)
-            || loadimg (disp, shared, "hmeter18.png", &_ihmeter18)
-            || loadimg (disp, shared, "bscale09.png", &_ibscale09)
-            || loadimg (disp, shared, "bscale18.png", &_ibscale18)
-            || loadimg (disp, shared, "bscaleLU.png", &_ibscaleLU)
-            || loadimg (disp, shared, "bscaleFS.png", &_ibscaleFS)
-            || loadimg (disp, shared, "bmodeM.png", &_ibmodeM)
-            || loadimg (disp, shared, "bmodeS.png", &_ibmodeS)
-            || loadimg (disp, shared, "bpause.png", &_ibpause)
-            || loadimg (disp, shared, "bstart.png", &_ibstart)
-            || loadimg (disp, shared, "breset.png", &_ibreset)
-            || loadimg (disp, shared, "bpeak1.png", &_ibpeak1));
+    return (   loadimg (disp, shared, "hscale09r.png", &_ihscale09r, scale)
+            || loadimg (disp, shared, "hscale09a.png", &_ihscale09a, scale)
+            || loadimg (disp, shared, "hscale18r.png", &_ihscale18r, scale)
+            || loadimg (disp, shared, "hscale18a.png", &_ihscale18a, scale)
+            || loadimg (disp, shared, "hticks.png", &_ihticks, scale)
+            || loadimg (disp, shared, "hmeterbg.png", &_ihmeterbg, scale)
+            || loadimg (disp, shared, "hmeter09.png", &_ihmeter09, scale)
+            || loadimg (disp, shared, "hmeter18.png", &_ihmeter18, scale)
+            || loadimg (disp, shared, "bscale09.png", &_ibscale09, scale)
+            || loadimg (disp, shared, "bscale18.png", &_ibscale18, scale)
+            || loadimg (disp, shared, "bscaleLU.png", &_ibscaleLU, scale)
+            || loadimg (disp, shared, "bscaleFS.png", &_ibscaleFS, scale)
+            || loadimg (disp, shared, "bmodeM.png", &_ibmodeM, scale)
+            || loadimg (disp, shared, "bmodeS.png", &_ibmodeS, scale)
+            || loadimg (disp, shared, "bpause.png", &_ibpause, scale)
+            || loadimg (disp, shared, "bstart.png", &_ibstart, scale)
+            || loadimg (disp, shared, "breset.png", &_ibreset, scale)
+            || loadimg (disp, shared, "bpeak1.png", &_ibpeak1, scale));
 } 
 
 
@@ -121,7 +121,8 @@ void Ebu_r128_disp::fini (X_display *disp)
 }
 
 
-Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg) :
+Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg, float win_scale) :
+	scale (win_scale),
     X_window (parent, xp, yp, XS, YS, bg->pixel),
     _callb (callb),
     _count (0)

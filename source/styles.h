@@ -41,7 +41,7 @@ enum
 };
 
 
-extern int  styles_init (X_display *disp, X_resman *xrm, const char *shared);
+extern int  styles_init (X_display *disp, X_resman *xrm, const char *shared, float scale);
 extern void styles_fini (X_display *disp);
 
 extern XftColor  *XftColors [NXFTCOLORS];

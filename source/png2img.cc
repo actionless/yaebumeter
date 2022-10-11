@@ -22,9 +22,11 @@
 #include <png.h>
 #include <clxclient.h>
 
+#include "mainwin.h"
 
 
-XImage *png2img (const char *file, X_display *disp, XftColor *bgnd)
+
+XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
 {
     FILE                 *F;
     png_byte             hdr [8];
