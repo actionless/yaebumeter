@@ -124,6 +124,15 @@ void Ebu_r128_disp::fini (X_display *disp)
 }
 
 
+void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f) {
+    XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
+}
+
+
+X_textip* Ebu_r128_disp::scaled_X_texttip(Ebu_r128_disp* drawable, X_callback* cb, X_textln_style* style, int a, int b, int c, int d, int e) {
+	return new X_textip(drawable, cb, style, (int)(a*scale), (int)(b*scale), (int)(c*scale), (int)(d*scale), (int)(e*scale));
+}
+
 Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg, float win_scale) :
 	scale (win_scale),
     X_window (parent, (int)(xp*win_scale), (int)(yp*win_scale), (int)(XS*win_scale), (int)(YS*win_scale), bg->pixel),
@@ -132,11 +141,11 @@ Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int y
 {
     int x, y;
 
-    _t_unit = new X_textip (this,  0, &tstyle2, X1 + 5, Y2, 60, 24, 7);
+    _t_unit = scaled_X_texttip (this,  0, &tstyle2, X1 + 5, Y2, 60, 24, 7);
     _t_unit->x_map ();
-    _t_integ = new X_textip (this, 0, &tstyle1, X1 - 280, Y5, 120, 18, 31);
+    _t_integ = scaled_X_texttip (this, 0, &tstyle1, X1 - 280, Y5, 120, 18, 31);
     _t_integ->x_map ();
-    _t_range = new X_textip (this, 0, &tstyle1, X1 - 120, Y5, 120, 18, 31);
+    _t_range = scaled_X_texttip (this, 0, &tstyle1, X1 - 120, Y5, 120, 18, 31);
     _t_range->x_map ();
 
     x = X1 + 50;
@@ -335,11 +344,6 @@ void Ebu_r128_disp::handle_callb (int type, X_window *W, XEvent *E)
 	    break;
 	}
     }
-}
-
-
-void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f) {
-    XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
 }
 
 
