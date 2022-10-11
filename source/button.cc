@@ -33,14 +33,16 @@ PushButton::PushButton (X_window     *parent,
 		        int  xp,
                         int  yp,
 			int  xs,
-			int  ys) :
-    X_window (parent, xp, yp, xs, ys, 0),
+			int  ys,
+			float scale) :
+	scale (scale),
+    X_window (parent, (int)(xp*scale), (int)(yp*scale), (int)(xs*scale), (int)(ys*scale), 0),
     _cbobj (cbobj),
     _cbind (cbind),
     _image (image),
     _state (0),
-    _xs (xs),
-    _ys (ys)
+    _xs ((int)(xs*scale)),
+    _ys ((int)(ys*scale))
 {
     x_add_events (ExposureMask | ButtonPressMask | ButtonReleaseMask);
 } 

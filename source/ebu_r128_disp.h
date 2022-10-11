@@ -23,6 +23,7 @@
 #define	__EBU_R128_DISP_H
 
 
+#include <X11/X.h>
 #include <clxclient.h>
 #include "guiclass.h"
 
@@ -40,6 +41,7 @@ public:
     static int  init (X_display *disp, const char *shared, float scale);
     static void fini (X_display *disp);
 
+	void scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f);
     void set_scale (bool abs, bool ext);
     void set_level (float vm, float pm, float vs, float ps);
     void set_integ (float v_i);

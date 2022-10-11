@@ -19,6 +19,9 @@
 // ------------------------------------------------------------------------
 
 
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <clxclient.h>
 #include <math.h>
 #include "png2img.h"
 #include "styles.h"
@@ -123,7 +126,7 @@ void Ebu_r128_disp::fini (X_display *disp)
 
 Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int yp, XftColor *bg, float win_scale) :
 	scale (win_scale),
-    X_window (parent, xp, yp, XS, YS, bg->pixel),
+    X_window (parent, (int)(xp*win_scale), (int)(yp*win_scale), (int)(XS*win_scale), (int)(YS*win_scale), bg->pixel),
     _callb (callb),
     _count (0)
 {
@@ -138,35 +141,35 @@ Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int y
 
     x = X1 + 50;
     y = Y5 - 7;
-    _bpeak1 = new Pbutt1 (this, this, BPEAK1, _ibpeak1, x, y, 32, 24);
+    _bpeak1 = new Pbutt1 (this, this, BPEAK1, _ibpeak1, x, y, 32, 24, scale);
     _bpeak1->x_map();
 
     x = X1 + 120;
     y = Y0 + 4;
-    _bmodeM = new Pbutt1 (this, this, BMODEM, _ibmodeM, x, y, 24, 16);
+    _bmodeM = new Pbutt1 (this, this, BMODEM, _ibmodeM, x, y, 24, 16, scale);
     _bmodeM->x_map();
     _bmodeM->set_state (2);
-    _bmodeS = new Pbutt1 (this, this, BMODES, _ibmodeS, x, y + 17, 24, 16); 
+    _bmodeS = new Pbutt1 (this, this, BMODES, _ibmodeS, x, y + 17, 24, 16, scale); 
     _bmodeS->x_map();
     x += 36;
-    _bscale09 = new Pbutt1 (this, this, BSCALE09, _ibscale09, x, y, 24, 16);
+    _bscale09 = new Pbutt1 (this, this, BSCALE09, _ibscale09, x, y, 24, 16, scale);
     _bscale09->x_map();
-    _bscale18 = new Pbutt1 (this, this, BSCALE18, _ibscale18, x, y + 17, 24, 16); 
+    _bscale18 = new Pbutt1 (this, this, BSCALE18, _ibscale18, x, y + 17, 24, 16, scale); 
     _bscale18->x_map();
     x += 26;
-    _bscaleLU = new Pbutt1 (this, this, BSCALELU, _ibscaleLU, x, y, 24, 16);
+    _bscaleLU = new Pbutt1 (this, this, BSCALELU, _ibscaleLU, x, y, 24, 16, scale);
     _bscaleLU->x_map();
-    _bscaleFS = new Pbutt1 (this, this, BSCALEFS, _ibscaleFS, x, y + 17, 24, 16); 
+    _bscaleFS = new Pbutt1 (this, this, BSCALEFS, _ibscaleFS, x, y + 17, 24, 16, scale); 
     _bscaleFS->x_map();
 
     x = X1 + 120;
     y = Y5 - 7;
-    _bpause = new Pbutt1 (this, this, BPAUSE, _ibpause, x, y, 24, 24);
+    _bpause = new Pbutt1 (this, this, BPAUSE, _ibpause, x, y, 24, 24, scale);
     _bpause->x_map();
     _bpause->set_state (2);
-    _bstart = new Pbutt1 (this, this, BSTART, _ibstart, x + 25, y, 24, 24);
+    _bstart = new Pbutt1 (this, this, BSTART, _ibstart, x + 25, y, 24, 24, scale);
     _bstart->x_map();
-    _breset = new Pbutt1 (this, this, BRESET, _ibreset, x + 60, y, 24, 24);
+    _breset = new Pbutt1 (this, this, BRESET, _ibreset, x + 60, y, 24, 24, scale);
     _breset->x_map();
  
     _ticks = _ihticks;
@@ -195,7 +198,7 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale18a : _ihscale18r;
         _imag1 = _ihmeter18;
-        _db2pix = IDIV / 2;
+        _db2pix = (int)(IDIV / 2.0 * scale);
         _bscale09->set_state (0);
         _bscale18->set_state (2);
     }
@@ -203,7 +206,7 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
     {
 	_scale = abs ? _ihscale09a : _ihscale09r;
         _imag1 = _ihmeter09;
-        _db2pix = IDIV;
+        _db2pix = (int)(IDIV * scale);
         _bscale09->set_state (2);
         _bscale18->set_state (0);
     }
@@ -220,7 +223,7 @@ void Ebu_r128_disp::set_scale (bool abs, bool ext)
 	_bscaleFS->set_state (0);
     }
     _abs = abs;
-    XPutImage (dpy (), win (), dgc (), _scale,  0, 0,  0, Y0, IMGS, 10); 
+    scaled_XPutImage (dpy (), win (), dgc (), _scale,  0, 0,  0, Y0, IMGS, 10); 
     disp_integ ();
 }
 
@@ -333,21 +336,27 @@ void Ebu_r128_disp::handle_callb (int type, X_window *W, XEvent *E)
 }
 
 
+void Ebu_r128_disp::scaled_XPutImage(Display* dpy, Drawable win, GC dgc, XImage* _img, int a, int b, int c, int d, int e, int f) {
+	printf("%d %d %d %d %d %d\n", a, b, c, d, e, f);
+    XPutImage (dpy, win, dgc, _img, (int)(a*scale), (int)(b*scale),  (int)(c*scale), (int)(d*scale), (int)(e*scale), (int)(f*scale));
+}
+
+
 void Ebu_r128_disp::expose (XExposeEvent *E)
 {
     if (E->count) return;
     XSetFunction (dpy (), dgc (), GXcopy);
-    XPutImage (dpy (), win (), dgc (), _scale,  0, 0,  0, Y0, IMGS, 12); 
-    XPutImage (dpy (), win (), dgc (), _ticks,  0, 0,  0, Y1, IMGS, 8); 
-    XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y2, IMGS, H2); 
-    XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y3, IMGS, H3); 
-    XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y4, IMGS, H4); 
-    _kr = X0 - 1;
-    _kp = X0 - 1;
+    scaled_XPutImage (dpy (), win (), dgc (), _scale,  0, 0,  0, Y0, IMGS, 12); 
+    scaled_XPutImage (dpy (), win (), dgc (), _ticks,  0, 0,  0, Y1, IMGS, 8);
+    scaled_XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y2, IMGS, H2); 
+    scaled_XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y3, IMGS, H3); 
+    scaled_XPutImage (dpy (), win (), dgc (), _imag0,  0, 0,  0, Y4, IMGS, H4); 
+    _kr = (X0 - 1);
+    _kp = (X0 - 1);
     _dp = 0;
-    _ki = X0 - 1;
-    _k0 = X0 - 1;
-    _k1 = X0 - 1;
+    _ki = (X0 - 1);
+    _k0 = (X0 - 1);
+    _k1 = (X0 - 1);
     disp_level ();
     disp_integ ();
     disp_range ();
@@ -381,19 +390,19 @@ void Ebu_r128_disp::disp_level (void)
     XSetForeground (dpy (), dgc (), XftColors [C_DISP_PK]->pixel);
     if (_dp > 0)
     {
-        XPutImage (dpy (), win (), dgc (), _imag0, _kp - _dp, 0, _kp - _dp, Y2, _dp, H2);
+        scaled_XPutImage (dpy (), win (), dgc (), _imag0, _kp - _dp, 0, _kp - _dp, Y2, _dp, H2);
     }
     if (kr > _kr)
     {
-        XPutImage (dpy (), win (), dgc (), _imag1, _kr, 0, _kr, Y2, kr - _kr, H2); 
+        scaled_XPutImage (dpy (), win (), dgc (), _imag1, _kr, 0, _kr, Y2, kr - _kr, H2); 
     }	    
     else if (kr < _kr)
     {
-        XPutImage (dpy (), win (), dgc (), _imag0, kr, 0, kr, Y2, _kr - kr, H2); 
+        scaled_XPutImage (dpy (), win (), dgc (), _imag0, kr, 0, kr, Y2, _kr - kr, H2); 
     }	    
     if (dp > 0)
     {
-        XFillRectangle (dpy (), win (), dgc (), kp - dp, Y2, dp, H2 - 1);
+        XFillRectangle (dpy (), win (), dgc (), (int)((kp - dp)*scale), (int)(Y2*scale), (int)(dp*scale), (int)((H2 - 1)*scale));
     }
     _kr = kr;
     _kp = kp;
@@ -461,14 +470,14 @@ void Ebu_r128_disp::disp_range (void)
 void Ebu_r128_disp::plot_level (int z0, int z1, int y, int dy)
 {
     XSetFunction (dpy (), dgc (), GXcopy);
-    if      (z1 > z0) XPutImage (dpy (), win (), dgc (), _imag1, z0 + 1, 0, z0 + 1, y, z1 - z0, dy); 
-    else if (z1 < z0) XPutImage (dpy (), win (), dgc (), _imag0, z1 + 1, 0, z1 + 1, y, z0 - z1, dy);
+    if      (z1 > z0) scaled_XPutImage (dpy (), win (), dgc (), _imag1, z0 + 1, 0, z0 + 1, y, z1 - z0, dy); 
+    else if (z1 < z0) scaled_XPutImage (dpy (), win (), dgc (), _imag0, z1 + 1, 0, z1 + 1, y, z0 - z1, dy);
 }
 
 
 void Ebu_r128_disp::plot_range (int z0, int z1, int y, int dy)
 {
     XSetFunction (dpy (), dgc (), GXcopy);
-    XPutImage (dpy (), win (), dgc (), _imag0, 0, 0, 0, y, IMGS, dy);
-    if (z0 >= X0) XPutImage (dpy (), win (), dgc (), _imag1, z0, 0, z0, y, z1 - z0 + 1, dy); 
+    scaled_XPutImage (dpy (), win (), dgc (), _imag0, 0, 0, 0, y, IMGS, dy);
+    if (z0 >= X0) scaled_XPutImage (dpy (), win (), dgc (), _imag1, z0, 0, z0, y, z1 - z0 + 1, dy); 
 }

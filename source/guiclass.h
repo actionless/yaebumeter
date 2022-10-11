@@ -37,8 +37,9 @@ public:
             int        xp,
             int        yp,
 	    int        xs,
-	    int        ys) :
-    PushButton (parent, cbobj, cbind, image, xp, yp, xs, ys)
+	    int        ys,
+		float scale) :
+    PushButton (parent, cbobj, cbind, image, xp, yp, xs, ys, scale)
     {
     }
 
@@ -62,8 +63,9 @@ public:
             int        xp,
             int        yp,
 	    int        xs,
-	    int        ys) :
-    PushButton (parent, cbobj, cbind, image, xp, yp, xs, ys)
+	    int        ys,
+		float scale) :
+    PushButton (parent, cbobj, cbind, image, xp, yp, xs, ys, scale)
     {
     }
 

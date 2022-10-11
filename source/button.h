@@ -37,7 +37,8 @@ public:
 	        int xp,
                 int yp,
 		int xs,
-		int ys);
+		int ys,
+		float scale);
 
     virtual ~PushButton (void);
 
@@ -74,6 +75,7 @@ private:
 
     static int _keymod;
     static int _button;
+	float scale;
 };
 
 

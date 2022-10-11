@@ -87,7 +87,7 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
     image = XCreateImage (disp->dpy (),
                           disp->dvi (),
                           DefaultDepth (disp->dpy (), disp->dsn ()),
-                          ZPixmap, 0, 0, dx, dy, 32, 0);
+                          ZPixmap, 0, 0, dx*scale, dy*scale, 32, 0);
     image->data = new char [image->height * image->bytes_per_line];
 
     mr = image->red_mask;
@@ -107,16 +107,16 @@ XImage *png2img (const char *file, X_display *disp, XftColor *bgnd, float scale)
 
     for (y = 0; y < dy; y++)
     {
-	p = data [y];
+		p = data [y];
         for (x = 0; x < dx; x++)
-	{
-	    va = (dp == 4) ? (p [3] / 255.0f) : 1;
-	    pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
-                | ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
-                | ((unsigned long)((p [2] * va + (1 - va) * bb) * vb) & mb);
-	    XPutPixel (image, x, y, pix);
-	    p += dp;
-	}
+		{
+			va = (dp == 4) ? (p [3] / 255.0f) : 1;
+			pix = ((unsigned long)((p [0] * va + (1 - va) * br) * vr) & mr) 
+					| ((unsigned long)((p [1] * va + (1 - va) * bg) * vg) & mg)
+					| ((unsigned long)((p [2] * va + (1 - va) * bb) * vb) & mb);
+			XPutPixel (image, x, y, pix);
+			p += dp;
+		}
     }
 
     png_destroy_read_struct (&png_ptr, &png_info, 0);
