@@ -1,0 +1,36 @@
+Ebumeter-0.4.2  - Released 25 Aug 2018
+--------------------------------------
+
+Maintenance release.
+
+
+Ebumeter-0.4.0  - Released 1 Jul 2016
+--------------------------------------
+
+Added digital peak indicator.
+This will flash yellow at -1 dB and turn
+red at 0 dB. Click to reset.
+
+
+Ebumeter-0.2.0  - Released 11 Dec 2011
+--------------------------------------
+
+Changed threshold for integrated loudness computation from
+-8 to -10 dB below the result of the first integration, as
+per changed standard.
+
+Added --full options to ebur128. Without this options only
+Integrated Loudness and Loudness Range are printed.
+
+
+
+Ebumeter-0.1.0  - First release 8 May 2011
+------------------------------------------
+
+Loudness measurement according to EBU-R128.
+Presented at LAC 2011 (thanks to Joern Nettingsmeier !).
+The only documentation available ATM are the paper, the presentation
+slides and the video of the LAC 2011 session.
+
+-- 
+FA
