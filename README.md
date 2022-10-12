@@ -10,11 +10,16 @@ Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/qu
 
 ### HiDPI scale support
 
-Scale support is currently only manual, to use run:
+Scale support is currently only manual, to set interface scale either
+set environment variable or use CLI flag
+(CLI flag have higher priority over env var):
 
 ```console
+ebumeter -z 2
+./source/ebumeter -z 1.3
 EBUMETER_SCALE=2 ebumeter
 EBUMETER_SCALE=1.5 ./source/ebumeter
+
 ```
 
 ### Connect to jack client via command-line on start

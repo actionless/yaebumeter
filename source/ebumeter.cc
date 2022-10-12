@@ -31,7 +31,7 @@
 #include <math.h>
 
 
-#define NOPTS 5
+#define NOPTS 6
 #define CP (char *)
 
 
@@ -41,7 +41,8 @@ XrmOptionDescRec options [NOPTS] =
     {CP"-s",   CP".server",   XrmoptionSepArg,  0        },
     {CP"-g",   CP".geometry", XrmoptionSepArg,  0        },
     {CP"-cl",  CP".connectl", XrmoptionSepArg,  0        },
-    {CP"-cr",  CP".connectr", XrmoptionSepArg,  0        }
+    {CP"-cr",  CP".connectr", XrmoptionSepArg,  0        },
+    {CP"-z",   CP".zoom",     XrmoptionSepArg,  0        }
 };
 
 
@@ -60,6 +61,7 @@ static void help (void)
     fprintf (stderr, "  -g <geometery>   Window position\n");
     fprintf (stderr, "  -cl <jack_name>  Connect to Left channel\n");
     fprintf (stderr, "  -cr <jack_name>  Connect to Right channel\n");
+    fprintf (stderr, "  -z <ratio>       Zoom ratio for UI\n");
     exit (1);
 }
 
@@ -77,13 +79,13 @@ const char* GetEnv( const char* tag, const char* def=nullptr ) noexcept {
 }
 
 
-const float DetectDisplayScale () {
+const float DetectDisplayScale (const char *cli_arg) {
 	// @TODO: implement actual dpi detection using X dpy
 	//        instead of using 1.0 as a fallback:
 	float scale = 1.0;
 
-	const char * scale_env = GetEnv("EBUMETER_SCALE");
 	printf("Going to detect DPI from EBUMETER_SCALE env var...\n");
+	const char * scale_env = cli_arg ? cli_arg : GetEnv("EBUMETER_SCALE");
 	if (scale_env) {
 		scale = std::stof(scale_env);
 		printf("%s\n", scale_env);
@@ -95,7 +97,6 @@ const float DetectDisplayScale () {
 
 int main (int ac, char *av [])
 {
-	float scale = DetectDisplayScale();
     X_resman       xresman;
     X_display     *display;
     X_handler     *handler;
@@ -112,6 +113,7 @@ int main (int ac, char *av [])
         delete display;
 	return 1;
     }
+	float scale = DetectDisplayScale(xresman.get (".zoom", 0));
 
     xp = (int)roundf(yp = (100 * scale));
     xs = (int)roundf((Mainwin::XSIZE + 2) * scale);
