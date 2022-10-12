@@ -1,21 +1,29 @@
 ebumeter-hidpi
 ==============
 
-Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/quickguide.html) with added HiDPI scale support.
+Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/quickguide.html).
+
+
+
+
+## New features
+
+### HiDPI scale support
 
 Scale support is currently only manual, to use run:
 
 ```console
+EBUMETER_SCALE=2 ebumeter
 EBUMETER_SCALE=1.5 ./source/ebumeter
 ```
 
-or
+### Connect to jack client via command-line on start
 
 ```console
-EBUMETER_SCALE=2 ebumeter
+ebumeter -cl "Bose AE2 SoundLink:monitor_FL" -cr "Bose AE2 SoundLink:monitor_FR"
+./source/ebumeter -cl 'ATH-M50xBT    :monitor_FL' -cr 'ATH-M50xBT    :monitor_FR'
 ```
 
-etc
 
 ## Some screenshots
 

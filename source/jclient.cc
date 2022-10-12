@@ -24,13 +24,13 @@
 #include "global.h"
 
 
-Jclient::Jclient (const char *jname, const char *jserv) :
+Jclient::Jclient (const char *jname, const char *jserv, const char *connectl, const char *connectr) :
     A_thread ("Jclient"),
     _jack_client (0),
     _jname (0),
     _state (0)
 {
-    init_jack (jname, jserv);
+    init_jack (jname, jserv, connectl, connectr);
 }
 
 
@@ -40,7 +40,7 @@ Jclient::~Jclient (void)
 }
 
 
-void Jclient::init_jack (const char *jname, const char *jserv)
+void Jclient::init_jack (const char *jname, const char *jserv, const char *connectl, const char *connectr)
 {
     int            opts;
     jack_status_t  stat;
@@ -66,6 +66,17 @@ void Jclient::init_jack (const char *jname, const char *jserv)
 
     _inpports [0] = jack_port_register (_jack_client, "in.L", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
     _inpports [1] = jack_port_register (_jack_client, "in.R", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+
+	if (connectl and connectr) {
+		printf("Connecting to Jack client:\n L:'%s'\n R:'%s'\n", connectl, connectr);
+		int rcl = jack_connect(_jack_client, connectl, jack_port_name(_inpports[0]));
+		int rcr = jack_connect(_jack_client, connectr, jack_port_name(_inpports[1]));
+		if (!rcl and !rcr) {
+			printf("Jack connected!\n");
+		} else {
+			fprintf(stderr, "ERROR connecting to jack clients.\n");
+		}
+	}
 
     _ebu_r128.init (2, _fsamp);
     _peakproc.init (2, _fsamp);

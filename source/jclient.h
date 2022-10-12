@@ -37,7 +37,7 @@ class Jclient : public A_thread
 {
 public:
 
-    Jclient (const char *jname, const char *jserv);
+    Jclient (const char *jname, const char *jserv, const char *connectl, const char *connectr);
     ~Jclient (void);
   
     const char *jname (void) const { return _jname; }
@@ -46,7 +46,7 @@ public:
     
 private:
 
-    void  init_jack (const char *jname, const char *jserv);
+    void  init_jack (const char *jname, const char *jserv, const char *connectl, const char *connectr);
     void  close_jack (void);
     void  jack_shutdown (void);
     int   jack_process (int frames);

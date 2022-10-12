@@ -31,7 +31,7 @@
 #include <math.h>
 
 
-#define NOPTS 3
+#define NOPTS 5
 #define CP (char *)
 
 
@@ -39,7 +39,9 @@ XrmOptionDescRec options [NOPTS] =
 {
     {CP"-h",   CP".help",     XrmoptionNoArg,   CP"true" },
     {CP"-s",   CP".server",   XrmoptionSepArg,  0        },
-    {CP"-g",   CP".geometry", XrmoptionSepArg,  0        }
+    {CP"-g",   CP".geometry", XrmoptionSepArg,  0        },
+    {CP"-cl",  CP".connectl", XrmoptionSepArg,  0        },
+    {CP"-cr",  CP".connectr", XrmoptionSepArg,  0        }
 };
 
 
@@ -56,6 +58,8 @@ static void help (void)
     fprintf (stderr, "  -name <name>     Jack client name\n");
     fprintf (stderr, "  -s <server>      Jack server name\n");
     fprintf (stderr, "  -g <geometery>   Window position\n");
+    fprintf (stderr, "  -cl <jack_name>  Connect to Left channel\n");
+    fprintf (stderr, "  -cr <jack_name>  Connect to Right channel\n");
     exit (1);
 }
 
@@ -119,7 +123,12 @@ int main (int ac, char *av [])
 		return 1;
     }
 
-    jclient = new Jclient (xresman.rname (), xresman.get (".server", 0));
+    jclient = new Jclient (
+		xresman.rname (),
+		xresman.get (".server", 0),
+		xresman.get (".connectl", 0),
+		xresman.get (".connectr", 0)
+	);
     rootwin = new X_rootwin (display);
     mainwin = new Mainwin (rootwin, &xresman, xp, yp, jclient, scale);
     rootwin->handle_event ();
