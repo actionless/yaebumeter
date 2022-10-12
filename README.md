@@ -11,6 +11,9 @@ Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/qu
 * [Screenshots](#screenshots "")
 
 
+![preview](https://github.com/actionless/ebumeter-hidpi/raw/master/screenshots/scale1.png)
+
+
 ## New Features
 
 ### HiDPI scale support
