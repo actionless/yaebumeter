@@ -26,7 +26,7 @@ SHARED ?= $(PREFIX)/share/ebumeter
 VERSION = 0.4.2
 CPPFLAGS += -MMD -MP -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -O2 -Wall -ffast-math -pthread
-#CXXFLAGS += -march=native
+CXXFLAGS += -march=native
 
 
 all:	ebur128 ebumeter
