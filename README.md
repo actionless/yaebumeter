@@ -6,9 +6,12 @@ Yet Another EBU Meter.
 Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/quickguide.html).
 
 
+* [New Features](#new-features "")
+* [Plans](#plans "")
+* [Screenshots](#screenshots "")
 
 
-## New features
+## New Features
 
 ### HiDPI scale support
 
@@ -40,7 +43,7 @@ ebumeter -cl "Bose AE2 SoundLink:monitor_FL" -cr "Bose AE2 SoundLink:monitor_FR"
 
 
 
-## Some screenshots
+## Screenshots
 
 ### Original
 ![preview](https://github.com/actionless/ebumeter-hidpi/raw/master/screenshots/scale1.png)
