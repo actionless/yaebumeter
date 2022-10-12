@@ -1,7 +1,7 @@
 # Maintainer: David Runge <dave@sleepmap.de>
 
-_pkgname=ebumeter
-pkgname="${_pkgname}-hidpi-git"
+_pkgname=yaebumeter
+pkgname="${_pkgname}-git"
 pkgver=0.4.2
 pkgrel=4
 pkgdesc="Loudness measurement according to EBU-R128"
@@ -15,13 +15,14 @@ source=(
 	"${pkgname}::git+${url}.git#branch=master"
 )
 sha512sums=('SKIP')
+# @TODO: change binary name to avoid conflict in case if it won't be merged upstream:
 conflicts=('ebumeter-git' 'ebumeter')
 provides=('ebumeter')
 
 pkgver() {
 	cd "${srcdir}/${pkgname}" || exit 2
 	set -o pipefail
-	git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g' || echo 0.0.1
+	git describe --tags --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g' || echo 0.0.1
 }
 
 prepare() {
