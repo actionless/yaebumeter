@@ -1,5 +1,7 @@
-ebumeter-hidpi
-==============
+yaebumeter
+==========
+
+Yet Another EBU Meter.
 
 Fork of [ebumeter](https://kokkinizita.linuxaudio.org/linuxaudio/ebumeter-doc/quickguide.html).
 
@@ -28,6 +30,14 @@ EBUMETER_SCALE=1.5 ./source/ebumeter
 ebumeter -cl "Bose AE2 SoundLink:monitor_FL" -cr "Bose AE2 SoundLink:monitor_FR"
 ./source/ebumeter -cl 'ATH-M50xBT    :monitor_FL' -cr 'ATH-M50xBT    :monitor_FR'
 ```
+
+
+## Plans
+
+ - support for custom themes
+ - set options (like Momentary/Short-term, +9/+18, LU/LUFS, start) via CLI
+ - hotkeys
+
 
 
 ## Some screenshots
