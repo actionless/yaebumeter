@@ -151,19 +151,19 @@ Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int y
     _t_range = scaled_X_texttip (this, 0, &tstyle1, X1 - 120, Y5, 120, 18, 31);
     _t_range->x_map ();
 
-    x = X1 + 50;
+    x = X1 + 12;
     y = Y5 - 7;
     _bpeak1 = new Pbutt1 (this, this, BPEAK1, _ibpeak1, x, y, 32, 24, scale);
     _bpeak1->x_map();
 
-    x = X1 + 120;
+    x = X1 + 60;
     y = Y0 + 4;
     _bmodeM = new Pbutt1 (this, this, BMODEM, _ibmodeM, x, y, 24, 16, scale);
     _bmodeM->x_map();
     _bmodeM->set_state (2);
     _bmodeS = new Pbutt1 (this, this, BMODES, _ibmodeS, x, y + 17, 24, 16, scale); 
     _bmodeS->x_map();
-    x += 36;
+    x += 34;
     _bscale09 = new Pbutt1 (this, this, BSCALE09, _ibscale09, x, y, 24, 16, scale);
     _bscale09->x_map();
     _bscale18 = new Pbutt1 (this, this, BSCALE18, _ibscale18, x, y + 17, 24, 16, scale); 
@@ -174,7 +174,7 @@ Ebu_r128_disp::Ebu_r128_disp (X_window *parent, X_callback *callb, int xp, int y
     _bscaleFS = new Pbutt1 (this, this, BSCALEFS, _ibscaleFS, x, y + 17, 24, 16, scale); 
     _bscaleFS->x_map();
 
-    x = X1 + 120;
+    x = X1 + 60;
     y = Y5 - 7;
     _bpause = new Pbutt1 (this, this, BPAUSE, _ibpause, x, y, 24, 24, scale);
     _bpause->x_map();

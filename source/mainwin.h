@@ -33,7 +33,8 @@ class Mainwin : public A_thread, public X_window, public X_callback
 {
 public:
 
-    enum { XSIZE = 640, YSIZE = 75 };
+    //enum { XSIZE = 500, YSIZE = 75 };  // no logo
+    enum { XSIZE = 526, YSIZE = 75 };
 
     Mainwin (X_rootwin *parent, X_resman *xres, int xp, int yp, Jclient *jclient, float win_scale);
     ~Mainwin (void);

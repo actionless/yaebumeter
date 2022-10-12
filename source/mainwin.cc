@@ -157,7 +157,7 @@ void Mainwin::redraw (void)
 		dpy (), win (), dgc (), redzita,
 		0, 0,
 		(int)roundf((XSIZE - 35) * scale), 0,
-		(int)round(35*scale), (int)roundf(75*scale)
+		(int)roundf(35*scale), (int)roundf(75*scale)
 	);
 }
 
