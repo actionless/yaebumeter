@@ -40,7 +40,8 @@ ebumeter -cl "Bose AE2 SoundLink:monitor_FL" -cr "Bose AE2 SoundLink:monitor_FR"
 
 ## Plans
 
- - support for custom themes
+ - support for custom themes (and also multiple image scaling)
+   - few custom themes inspired by legendary hardware and software
  - set options (like Momentary/Short-term, +9/+18, LU/LUFS, start) via CLI
  - hotkeys
  - use `SDL` and `SDL_image` instead of `Xlib`
