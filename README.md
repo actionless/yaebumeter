@@ -46,6 +46,7 @@ ebumeter -cl "Bose AE2 SoundLink:monitor_FL" -cr "Bose AE2 SoundLink:monitor_FR"
  - hotkeys
  - use `SDL` and `SDL_image` instead of `Xlib`
  - show ms length of highest TruePeak (and mean/average length of other TruePeaks)
+   - add a switch for showing last/highest TruePeak length
 
 
 ## Screenshots
